@@ -130,32 +130,34 @@ def home_page(request):
     return JsonResponse('conversion done successfully', safe=False) """
 
 def upload_file(request):
-    print('updated-temp',temp)
+     try:
 
-    if request.method == "POST":
-        add_Excel = Add_Excel_Resources()
-        dataset = Dataset()
-        new_file = request.FILES['myfile']
-        if not new_file.name.endswith('xlsx'):
-            messages.info(request,'wrong format')
-        imported_data = dataset.load(new_file.read(),format='xlsx')
-        print(len(imported_data))
-        for data in imported_data:
-            value = Add_Excel(
-                data[0],
-                data[1],
-                data[2],
-                data[3],
-                data[4]    
-            )
-            print(data[3])
-            
-            value.save()
-    
-        return redirect('/upload/')
-    user = request.user
-    list_all = Add_Excel.objects.filter(user = user)
-    return render(request,'Tracker/upload.html',{'list_all': list_all})
+        if request.method == "POST":
+            add_Excel = Add_Excel_Resources()
+            dataset = Dataset()
+            new_file = request.FILES['myfile']
+            if not new_file.name.endswith('xlsx'):
+                messages.info(request,'wrong format')
+            imported_data = dataset.load(new_file.read(),format='xlsx')
+            print(len(imported_data))
+            for data in imported_data:
+                value = Add_Excel(
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[3],
+                    data[4]    
+                )
+                print(data[3])
+                
+                value.save()
+        
+            return redirect('/upload/')
+        user = request.user
+        list_all = Add_Excel.objects.filter(user = user)
+        return render(request,'Tracker/upload.html',{'list_all': list_all})
+    except:
+        return HttpResponse("<center><strong> FIle should not be empty \n Format should be as mentioned </strong></center>")
 
 @login_required(login_url='/login/')
 def track_history(request,id):
