@@ -1,0 +1,49 @@
+{%extends 'Tracker/base.html'%}
+{%block title%}Download Report {%endblock title%}
+
+{%block content%}
+
+<div class="card">
+        <div class="card-header">
+        <h3 class="card-title">Download Report From here</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                       
+               
+                        <th>Income</th>
+                        <th>Expense</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {%for x in expense%}
+                    <tr>
+                       
+                        <td>{{x.income}}</td>
+                        <td>{{x.expenses}}</td>
+                       
+                      
+                        
+                    </tr>
+                    {%endfor%}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Income</th>
+                        <th>Expense</th>
+                       
+                    </tr>
+                </tfoot>
+            </table>
+    </div>
+<!-- /.card-body -->
+</div>
+
+
+
+{%endblock content%}

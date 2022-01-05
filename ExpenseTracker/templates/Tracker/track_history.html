@@ -1,0 +1,88 @@
+{% extends 'Tracker/base.html' %}
+
+{% block title%} User | History {%endblock title%}
+
+{%block content%}
+
+ 
+
+<div>
+
+    <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                    <div class="card-header">
+                    <h3 class="card-title">History</h3>
+                    
+                    </div>
+                <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                            <th>id</th>
+                            <th>name</th>
+                            <th>amount</th>
+                            <th> category </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {%for expense in expenses%}
+                            <tr>
+            
+                            <td>{{expense.id}} </td>
+                            <td> {{expense.name}}</td>
+                            <td> 
+                                {%if expense.expence_type == 'positive'%}
+                              
+                              
+                                 <span style ="color:green">+€{{expense.amount}}</span>
+                            
+                        
+                            {%else%}
+                                
+                                     <span style = "color:red">-€{{expense.amount}}</span>
+                             
+                               
+                            {%endif%}</td>
+                            <td>{{expense.category}}</td>
+                
+                            </tr>
+                            {%endfor%}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                            
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th>amount</th>
+                                    <th>category</th>
+                               
+                            </tr>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+    
+             
+                  </table>
+               
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+      </section>
+
+</div>
+
+{%endblock content%}

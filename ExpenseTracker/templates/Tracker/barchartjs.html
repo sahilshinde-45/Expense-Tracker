@@ -1,0 +1,216 @@
+{%extends 'Tracker/base.html' %}
+
+{%block title%}Report {%endblock title%}
+
+{%block content%}
+{%load static%}
+<div class="card card-success">
+    <div class="card-header">
+      <h3 class="card-title">Bar Chart</h3>
+     
+
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button type="button" class="btn btn-tool" data-card-widget="remove">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="chart">
+        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+        <button onclick = "downloadPDF()"  class="btn btn-secondary">Bar PDF</button>
+      </div>
+    </div>
+
+    
+    <!-- /.card-body -->
+</div>
+<div class="card card-danger">
+    <div class="card-header">
+      <h3 class="card-title">Pie Chart</h3>    
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button type="button" class="btn btn-tool" data-card-widget="remove">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+      <button onclick = "downloadPDFpie()"  class="btn btn-secondary">Pie PDF</button>
+    </div>
+    <!-- /.card-body -->
+</div>
+<div>
+  <center>
+      <button class="btn btn-light" onclick="window.print();"><i class="fas fa-print"></i>Print Report</button> 
+  </center>
+</div>
+<br>
+
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+ <!-- ChartJS -->
+ <script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+ <!--DATA-TABLE-->
+ <script src="{%static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+ <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+ <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js'%}"></script>
+ <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+ <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+ <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+ <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+ <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+ <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+ <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+ <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+ <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+ 
+
+ <script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+
+ <script type = 'text/javascript'>
+
+     $(function () {
+         $("#example1").DataTable({
+           "responsive": true, "lengthChange": false, "autoWidth": false,
+           "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+         $('#example2').DataTable({
+           "paging": true,
+           "lengthChange": false,
+           "searching": false,
+           "ordering": true,
+           "info": true,
+           "autoWidth": false,
+           "responsive": true,
+         });
+       });
+
+      
+     $(function () {
+
+     
+        
+     
+         var areaChartData = {
+             labels  : [ {% for x in profile %} '{{x}}', {%endfor%} ],
+             datasets: [
+               {
+                 label               : 'Expense',
+                 backgroundColor     : 'rgba(60,141,188,0.9)',
+                 borderColor         : 'rgba(60,141,188,0.8)',
+                 pointRadius          : false,
+                 pointColor          : '#3b8bba',
+                 pointStrokeColor    : 'rgba(60,141,188,1)',
+                 pointHighlightFill  : '#fff',
+                 pointHighlightStroke: 'rgba(60,141,188,1)',
+                 data                : [{% for x in profile %} {{x.expenses}}, {%endfor%}]
+               },
+               {
+                 label               : 'Income',
+                 backgroundColor     : 'rgba(210, 214, 222, 1)',
+                 borderColor         : 'rgba(210, 214, 222, 1)',
+                 pointRadius         : false,
+                 pointColor          : 'rgba(210, 214, 222, 1)',
+                 pointStrokeColor    : '#c1c7d1',
+                 pointHighlightFill  : '#fff',
+                 pointHighlightStroke: 'rgba(220,220,220,1)',
+                 data                : [{% for x in profile %} {{x.income}}, {%endfor%}]
+               },
+             ]
+           }
+
+         var donutData  = {
+             labels: [
+                
+             {%for x in profile%}
+              {%for y in x.tracker_set.all%}
+                  '{{y.category}}',
+      
+              {%endfor%}
+            {%endfor%}
+             ],
+             datasets: [
+               {
+                 data: [{% for x in expenses %} {{x.amount}}, {%endfor%}],
+                 backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de','pink','darkred','lemon-yellow','purple','brown','lightgreen'],
+               }
+             ]
+           }
+     
+     var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+     var pieData        = pieData;
+     var pieOptions     = {
+       maintainAspectRatio : false,
+       responsive : true,
+     }
+    
+     new Chart(pieChartCanvas, {
+       type: 'pie',
+       data: donutData,
+       options: pieOptions
+     })
+
+     var barChartCanvas = $('#barChart').get(0).getContext('2d')
+     var barChartData = $.extend(true, {}, areaChartData)
+     var temp0 = areaChartData.datasets[0]
+     var temp1 = areaChartData.datasets[1]
+     barChartData.datasets[0] = temp1
+     barChartData.datasets[1] = temp0
+ 
+     var barChartOptions = {
+       responsive              : true,
+       maintainAspectRatio     : false,
+       datasetFill             : false,
+
+     }
+ 
+     new Chart(barChartCanvas, {
+       type: 'bar',
+       data: barChartData,
+       options: barChartOptions,
+       
+     })
+
+ })
+
+ function downloadPDF(){
+   
+    var barpdf = document.getElementById('barChart');
+    //create Image
+    var barImage = barpdf.toDataURL('image/jpeg',1.0);
+    //console.log(barImage)
+    //image - to - pdf 
+    var barpdf = new jsPDF('landscape');
+    barpdf.setFontSize(20);
+    barpdf.addImage(barImage, 'JPEG' , 15 ,15 ,250 ,125);
+    barpdf.save('bar-report.pdf');
+ }
+
+ function downloadPDFpie(){
+   
+  var piepdf = document.getElementById('pieChart');
+  //create Image
+  var pieImage = piepdf.toDataURL('image/jpeg',1.0);
+  //console.log(barImage)
+  //image - to - pdf 
+  var piepdf = new jsPDF('landscape');
+  piepdf.setFontSize(20);
+  piepdf.addImage(pieImage, 'JPEG' , 15 ,15 ,280 ,185);
+  piepdf.save('pie-report.pdf');
+}
+
+ </script>
+
+{%endblock content%}
+

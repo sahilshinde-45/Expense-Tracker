@@ -1,0 +1,198 @@
+{%extends 'Tracker/base.html' %}
+{%load static%}
+
+{%block title %} Home Page {%endblock title%}
+
+
+{%block content %}
+<style>
+
+.hr-text{
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    opacity: 0.5;
+}
+
+
+.hr-text:before{
+    content : "";
+    background: linear-gradient(to right, transparent ,black);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+}
+.hr-text:after{
+    content: attr(data-content);
+    position: relative;
+    display: inline-block;
+    color: black;
+    padding: 0 0.5em;
+    line-height: #818078;
+    background-color: #fcfcfa;
+}
+#imp{
+    color:red;
+}
+
+</style>
+
+<div class = "container">
+    <div class = "fluid-container">
+       
+          
+        <form action="" method="POST">
+            {%csrf_token%}
+                <h4>Exchange rate with respect to EURO </h4>  
+               
+                <h6> <div id = 'imp'>  <h6></div>
+                   
+                <select class="form-select" aria-label="Default select example" id = "currency" name = "currency">
+                    
+                    <option value="choose" >Choose Currency</option>
+                    <option value="USD" >US Dollar</option>
+                    <option value="EUR" selected>Euro</option>
+                    <option value="JPY">Japanese Yen</option>
+                    <option value="GBP">British Pound Sterling</option>
+                    <option value="AUD">Australian Dollar</option>
+                    <option value="CAD">Canadian Dollar</option>
+                    <option value="CHF">Swiss Franc</option>
+                    <option value="CNY">Chinese Yuan</option>
+                    <option value="NZD">New Zealand Dollar</option>
+                    <option value="HKD">Hong Kong Dollar</option>
+                    <option value="INR" >Indian Rupees</option>
+                 </select>
+
+                <!-- <input type = "button" value = "set" id = 'set' style = "margin-left : 25px" >
+
+        </form>-->
+        <br>
+        <br>
+        {%for message in Messages%}
+            {{message}}
+        {%endfor%}
+        <form method = "POST" action = "#">
+            {%csrf_token%}
+        {{form}}
+        <br>
+        <input type = "submit" value = "save" id = 'save'>
+
+        </form>
+        <br>
+        <center>
+        <hr class = "hr-text" data-content = "OR Upload Excel sheet below" >
+          <a href = "{% url 'Tracker:upload' %}">Upload</a>
+        <br>
+        </center>
+        <br>
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %} 
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+
+        <div>
+
+            <section class="content">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="card">
+                            <div class="card-header">
+                            <h3 class="card-title">Tracker</h3>
+                            
+                            </div>
+                        <!-- /.card-header -->
+                            <div class="card-body">
+                                
+                                <table id="example" class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th>income</th>
+                                    <th>income - category</th>
+                                    <th>Expenses</th>
+                                    <th>balance</th>
+                                    <th>currency type </th>
+                                    <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                       
+                                       
+                                       
+                                        {%for x in list_all%}
+                                        
+                                    <tr>
+                                        
+                                    <td>{{x.id}} </td>
+                                    <td> {{x}}</td>
+                                    <td>€{{x.income }}</td>
+                                    <td>{{x.income_category}}</td>
+                                    <td>€{{x.expenses }}</td> 
+                                    <td>€{{x.balance}}</td>
+                                    <td>{{x.currency_type}} </td>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <td><a href="{% url 'Tracker:historytracker' x.id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a href="{% url 'Tracker:edittracker' x.id %}"><i class="fa fa-edit" aria-hidden="true" style="margin-left:10px"></i></a>
+                                    </td>
+                                    </tr>
+                                    {%endfor%}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>name</th>
+                                        <th>income</th>
+                                        <th>income - category</th>
+                                        <th>Expenses</th>
+                                        <th>balance</th>
+                                        <th>currency type </th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        <!-- /.card-body -->
+                      </div>
+                      <!-- /.card -->
+            
+                     
+                          </table>
+                       
+                        <!-- /.card-body -->
+                      </div>
+                      <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+              </section>
+             
+
+        </div>
+    </div>  
+   
+ 
+
+    
+
+{%endblock content%}

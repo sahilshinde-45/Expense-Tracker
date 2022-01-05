@@ -1,0 +1,96 @@
+{% extends 'Tracker/base.html' %}
+
+{%block content%}
+
+{%block url %}Upload {%endblock url%}
+
+
+<div>
+    <center>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="myfile">
+
+            <button type="submit" name 'upload'>Upload</button>
+        </form>
+    </center>
+        <br>
+
+    <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                    <div class="card-header">
+                    <h3 class="card-title">Tracker</h3>
+                    
+                    </div>
+                <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                               
+                                <th>income</th>
+                                <th>income - category</th>
+                                <th>Expenses</th>
+                                <th>User</th>
+                               
+                            </tr>
+                            </thead>
+                            <tbody>
+                               
+                               
+                              
+                                {%for x in list_all%}
+                                
+                            <tr>
+            
+                            <td>{{x.id}} </td>
+                            <td>{{x.income }}</td>
+                            <td>{{x.income_category}}</td>
+                            <td> {{x.expenses }}</td> 
+                            <td>{{x.user}}</td>
+                      
+                            </tr>
+                            {%endfor%}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>id</th>
+                               
+                                <th>income</th>
+                                <th>income - category</th>
+                                <th>Expenses</th>
+                                <th>User</th>
+                                
+                            </tr>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+    
+             
+                  </table>
+               
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+      </section>
+     
+
+</div>
+</div>  
+
+
+{%endblock content%}
