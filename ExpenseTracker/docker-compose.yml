@@ -1,0 +1,7 @@
+version: '3.0'
+services:
+  django:
+    images: sahilshinde108/expense_tracker-app
+    build: .
+    ports:
+    - "8000:8000"

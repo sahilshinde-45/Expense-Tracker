@@ -130,7 +130,7 @@ def home_page(request):
     return JsonResponse('conversion done successfully', safe=False) """
 
 def upload_file(request):
-     try:
+    try:
 
         if request.method == "POST":
             add_Excel = Add_Excel_Resources()
